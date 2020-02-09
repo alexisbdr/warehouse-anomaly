@@ -1,3 +1,8 @@
+#Local Files
+.vscode
+.ipynb_checkpoints
+data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -43,7 +48,7 @@ htmlcov/
 .nox/
 .coverage
 .coverage.*
-.cache
+.cach
 nosetests.xml
 coverage.xml
 *.cover
