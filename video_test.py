@@ -5,6 +5,7 @@ from tensorflow.keras.layers import LayerNormalization
 from os import listdir
 from os.path import isfile, join, isdir
 import cv2
+import json
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot  as plt
@@ -18,7 +19,7 @@ class Config:
         "data/UCSD_Anomaly_Dataset.v1p2/UCSDped1/Test/Test027"
         ]
     MODEL_PATH = "model_lstm.hdf5"
-    RESULTS_FILE = "test_results.csv"
+    RESULTS_FILE = "test_results.json"
 
 def get_model():
     tf.keras.backend.set_floatx('float32')
@@ -54,7 +55,7 @@ def sequence_from_data(data):
 def evaluate():
     model = get_model()
     out_dict = []
-    for idx in len(Config.TEST_PATHS):
+    for idx in range(len(Config.TEST_PATHS)):
         out = {}
         out["Path"] = Config.TEST_PATHS[idx]
         test = get_test(idx)
@@ -63,11 +64,11 @@ def evaluate():
         sequences_reconstruction_cost = np.array(
             [np.linalg.norm(
                 np.subtract(sequences[i],reconstructed_sequences[i])) 
-                for i in range(0,sz)])
+                for i in range(0,test.shape[0] - 10)])
         sa = (sequences_reconstruction_cost - np.min(sequences_reconstruction_cost)) / np.max(sequences_reconstruction_cost)
         sr = 1.0 - sa
-        out["Sequence Cost"] = sequences_reconstruction_cost
-        out["Score"] = sr
+        out["Sequence Cost"] = sequences_reconstruction_cost.tolist()
+        out["Score"] = sr.tolist()
         out_dict.append(out)
 
     with open(Config.RESULTS_FILE, 'w') as f:
