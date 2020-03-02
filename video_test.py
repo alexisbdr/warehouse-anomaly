@@ -12,11 +12,11 @@ import matplotlib.pyplot  as plt
 
 class Config:
     TEST_PATHS = [
+        "data/UCSD_Anomaly_Dataset.v1p2/UCSDped1/Test/Test027",
         "data/UCSD_Anomaly_Dataset.v1p2/UCSDped1/Test/Test019",
         "data/UCSD_Anomaly_Dataset.v1p2/UCSDped1/Test/Test024",
         "data/UCSD_Anomaly_Dataset.v1p2/UCSDped1/Test/Test014",
-        "data/UCSD_Anomaly_Dataset.v1p2/UCSDped1/Test/Test030",
-        "data/UCSD_Anomaly_Dataset.v1p2/UCSDped1/Test/Test027"
+        "data/UCSD_Anomaly_Dataset.v1p2/UCSDped1/Test/Test030"
         ]
     MODEL_PATH = "model_lstm.hdf5"
     RESULTS_FILE = "test_results.json"
@@ -73,9 +73,32 @@ def evaluate():
 
     with open(Config.RESULTS_FILE, 'w') as f:
         json.dump(out_dict, f)
+
+def evaulate_from_results():
+    with open(Config.RESULTS_FILE, 'r') as f:
+        results = json.load(f)
+    for result in results:
+        path = result['Path']
+
+
+def run_tests():
+    with open(Config.RESULTS_FILE, 'r') as f:
+        results = json.load(f)
+    for result in results:
+        path = result['Path']
+        frames = [f for f in listdir(path) if f.endswith('.tif')]
+        plt.axis([0,len(result['Score']),min(result['Score']) - .1,1.0])
+
+        #Plot the frame score
         
+        for idx, frame_score in enumerate(result["Score"]):
+            imgdata = cv2.imread(join(path,frames[idx]))
+            imgdata = cv2.resize(imgdata, (512, 512), cv2.INTER_AREA)
+            cv2.imshow('frame', imgdata)
+            plt.plot(idx, frame_score, ".b-")
+            plt.pause(.02)
+        plt.show()
 
-evaluate()
-
+run_tests()
 
 
