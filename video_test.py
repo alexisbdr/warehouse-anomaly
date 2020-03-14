@@ -134,24 +134,35 @@ def evaulate_from_results():
 
 
 def run_tests():
-    for file in sorted(listdir("Results")):
-        with open(file, 'r') as f:
+    colors = [".b-", "xr-", ".g-"]
+    for file in sorted(listdir("Results"), reverse=True):
+        with open(join("Results",file), 'r') as f:
             results = json.load(f)
-            model = result['model']
-            path = result['Path']
+            models = list(results.keys())
+            print(models)
+            path = results[models[0]]['Test Path']
+            print(path)
             frames = [f for f in listdir(path) if f.endswith('.tif') or f.endswith('png')]
-            
-            plt.axis([0,len(result['Score']),min(result['Score']) - .1,1.0])
-            fg, (ax1, ax2, ax3) = plt.subplot(1,3, sharey=True)
-            
-            for idx, frame_score in enumerate(result["Score"]):
+            plt.axis([0,len(results[models[0]]['Score']),min(results[models[0]]['Score']) - .1,1.0])
+            ax = plt.subplot(111)
+            box = ax.get_position()
+            ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+            # Put a legend to the right of the current axis
+            ax.plot([], colors[0], label=models[0].strip('.hdf5'))
+            ax.plot([], colors[1], label=models[1].strip('.hdf5'))
+            ax.plot([], colors[2], label=models[2].strip('.hdf5'))
+            ax.legend(loc='center left', bbox_to_anchor=(.8, 0.9))
+            for idx in range(len(results[models[0]]["Score"])):
                 imgdata = cv2.imread(join(path,frames[idx]))
                 imgdata = cv2.resize(imgdata, (512, 512), cv2.INTER_AREA)
                 cv2.imshow('frame', imgdata)
-                plt.plot(idx, frame_score, ".b-")
-                plt.pause(.02)
+                for ax_idx, model in enumerate(models):
+                    frame_score = results[model]['Score'][idx] 
+                    ax.plot(idx, frame_score, colors[ax_idx])
+                plt.pause(.01)
             plt.show()
         
-evaluate()
+run_tests()
 
 

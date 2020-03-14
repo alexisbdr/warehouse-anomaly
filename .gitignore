@@ -2,6 +2,7 @@
 .vscode
 .ipynb_checkpoints
 data/
+*hdf5
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
