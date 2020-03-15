@@ -14,5 +14,6 @@ class Config:
   
   EPOCHS = 3
   
-  MODEL_PATH = "UCSD+Avenue_model_lstm.hdf5""
+  MODEL_PATH = "model_lstm.hdf5"
+
 

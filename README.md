@@ -105,12 +105,16 @@ To download large files from Google Drive:
 ```
 #Navigate to the repo
 cd ~/warehouse-anomaly
-gdown https://drive.google.com/uc?id=1W1NrZyu-Q6R481zwLT7m8bfaGGAwAPYd
+gdown https://drive.google.com/uc?id=1zCu-4GLiDgjF94m8JZI6x0Z0d07QF6fa
 ```
 
+<<<<<<< HEAD
 You will find two folders in the downloaded "data/" folder:
 * UCSD Pedestrian: Video sequences of pedestrians on a walkway
 * CUHK Avenue: Vdieo sequence of people at a subway entrance
+=======
+You will find two folders in the downloaded folder
+>>>>>>> f9f913a6f9ad38eef09973706cd3663f7f98ae2d
 
 ### Your Own Data
 
