@@ -105,12 +105,10 @@ To download large files from Google Drive:
 ```
 #Navigate to the repo
 cd ~/warehouse-anomaly
-gdown https://drive.google.com/uc?id=1W1NrZyu-Q6R481zwLT7m8bfaGGAwAPYd
+gdown https://drive.google.com/uc?id=1zCu-4GLiDgjF94m8JZI6x0Z0d07QF6fa
 ```
 
 You will find two folders in the downloaded folder
-
-
 
 ### Your Own Data
 
