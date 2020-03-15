@@ -11,6 +11,7 @@ from PIL import Image
 import numpy as np
 import shelve
 import matplotlib.pyplot as plt
+import sys
 
 from config import Config
 
