@@ -108,13 +108,13 @@ cd ~/warehouse-anomaly
 gdown https://drive.google.com/uc?id=1W1NrZyu-Q6R481zwLT7m8bfaGGAwAPYd
 ```
 
-You will find two folders in the downloaded folder
-
-
+You will find two folders in the downloaded "data/" folder:
+* UCSD Pedestrian: Video sequences of pedestrians on a walkway
+* CUHK Avenue: Vdieo sequence of people at a subway entrance
 
 ### Your Own Data
 
-
+If you want to train/test the model with your own data you change the paths in config.py to your own folders. The data should be split into a sequence of images using ffmpeg
 
 ### Downloading Pre-Trained Models
 
