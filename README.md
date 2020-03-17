@@ -45,6 +45,12 @@ Follow these steps:
 * Storage: 
     * 50Gb of ssd
 
+### OPTION 1 - [DOCKER](https://hub.docker.com/repository/docker/abaudron0215/warehouse-anomaly)
+```
+docker run --gpus all -it abaudron0215/warehouse-anomaly bash
+```
+
+### OPTION 2 - MANUAL INSTALL WITH ANACONDA
 #### 1. Install Anaconda for Ubuntu
 ```
 ## You can visit (https://www.anaconda.com/distribution/) to install a different version of Anaconda
@@ -96,6 +102,7 @@ Change the training path in Config.py
 
 ## Available Resources (data and models)
 
+You do not need to do the following if you insalled via Docker
 To download large files from Google Drive:
 * Download Gdown
     * Anaconda
@@ -113,8 +120,8 @@ To download large files from Google Drive:
 
 ```
 #Navigate to the repo
-cd ~/warehouse-anomaly
-gdown https://drive.google.com/uc?id=1zCu-4GLiDgjF94m8JZI6x0Z0d07QF6fa
+cd warehouse-anomaly
+source download_data.sh
 ```
 
 You will find two folders in the downloaded "data/" folder:
@@ -146,7 +153,7 @@ UCSD+Avenue_model_lstm.hdf5 | UCSD Ped 1 & 2 / CUHK Avenue | [link](https://driv
 ```
 cd ~/warehouse-anomaly
 #e.g downloading the first model
-gdown https://drive.google.com/uc?id=1eIKttsHFUlZdWI4k7rIMDDsOAgURkhTp
+source download_models.sh
 ```
 
 ### Browser instructions
