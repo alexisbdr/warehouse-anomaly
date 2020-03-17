@@ -47,6 +47,7 @@ Follow these steps:
 
 ### OPTION 1 - [DOCKER](https://hub.docker.com/repository/docker/abaudron0215/warehouse-anomaly)
 ```
+docker pull abaudron0215/warehouse-anomaly
 docker run --gpus all -it abaudron0215/warehouse-anomaly bash
 ```
 
