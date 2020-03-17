@@ -28,13 +28,22 @@ You can read these papers for more information:
 
 ## Run Anomaly Detection
 ### Setting up the environment
-#### Requirements
+#### OS/Hardware Requirements
 * [Ubuntu 16+ (Tested on Ubuntu 18.04)]
 * [Nvidia GPU w/ 4Gb+ Memory]
-* [Tensorflow-gpu 2.0]
+* [~50GB of SSD storage]
+* [Tensorflow-gpu 2.0+]
 * [OpenCV3]
 
 Follow these steps:
+
+#### [SUGGESTED] EC2 Instance & Deep Learning AMI
+* [Deep Learning Base AMI](https://aws.amazon.com/marketplace/pp/B07Y3VDBNS)
+* Instance Type:
+    * testing: g4dn.xlarge
+    * training: g4dn.4xlarge
+* Storage: 
+    * 50Gb of ssd
 
 #### 1. Install Anaconda for Ubuntu
 ```
@@ -60,7 +69,7 @@ conda install pillow matplotlib
 ```
 git clone https://github.com/alexisbdr/warehouse-anomaly
 ```
-#### 4. Download the data - see data section below
+#### 4. Download data and models - see Available Resources section below 
 
 ### Testing
 You can run a pretrained model on a single test path by doing the following:
@@ -98,7 +107,7 @@ To download large files from Google Drive:
     pip install gdown
     ```
 
-### Data
+## 1. Data
 
 ### Pepared Datasets
 
@@ -118,8 +127,11 @@ If you want to train/test the model with your own data you change the paths in c
 ```
 #Install ffmpeg
 sudo apt-get install ffmpeg
-ffmpeg -i path_to_vid.mp4 -frames 400
+ffmpeg -i path_to_vid.mp4 -frames 400 -r 10 Test/img%04.tif
 ```
+You should play with the frames and r (framerate) parameters to get the most information out of the video sequenc
+
+## 2. Models
 
 ### Downloading Pre-Trained Models
 
