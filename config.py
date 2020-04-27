@@ -1,6 +1,6 @@
 class Config:
   
-  DATASET_PATH = "warehouse_dataset/DSCWillmer/Train"
+  TRAINING_PATH = ["warehouse_dataset/DSCWillmer/Train"]
   
   TEST_PATH = "warehouse_dataset/DSCWillmer/Test"
   

@@ -70,7 +70,7 @@ def get_training_set():
                 for c in sorted(listdir(join(data_file, f))):
                     if str(join(join(data_file, f), c))[-3:] == "tif":
                         img = Image.open(join(join(data_file, f), c)).resize((256, 256))
-                    elif str(join(join(data_file, f), c))[-3:] == "png":
+                    elif str(join(join(data_file, f), c)).endswith(("png", "jpeg")):
                         img = Image.open(join(join(data_file, f), c)).resize((256, 256)).convert('L')
                     else: continue
                     #print(join(join(data_file, f), c))
@@ -126,7 +126,7 @@ def get_single_test():
     test = np.zeros(shape=(sz, imsize, imsize, 1))
     cnt = 0
     for f in sorted(listdir(Config.SINGLE_TEST_PATH)):
-        if str(join(Config.SINGLE_TEST_PATH, f))[-3:] == "tif":
+        if str(join(Config.SINGLE_TEST_PATH, f)).endswith(("png","jpeg")):
             img = Image.open(join(Config.SINGLE_TEST_PATH, f)).resize((256, 256))
             img = np.array(img, dtype=np.float32) / float(256)
             test[cnt, :, :, 0] = img
