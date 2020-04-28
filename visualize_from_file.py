@@ -8,6 +8,7 @@ from result_dataclass import testResult
 
 results_folder = "Results/DSCWillmer"
 
+
 def run_tests():
 
     for file in sorted(listdir(results_folder), reverse=True):
@@ -19,15 +20,43 @@ def run_tests():
                 frames = result.test_frames
                 ax = result.setup_plot()
 
-                for idx in range(len(result.sequence_score)):
+                def drawing_loop(idx):
+                    """
+                    Uses cv2 to show the image from the current idx
+                    """
+                    if idx < 0:
+                        return
+
+                    w = 288
+                    h = 162
                     imgdata = cv2.imread(join(path,frames[idx]))
-                    imgdata = cv2.resize(imgdata, (512, 512), cv2.INTER_AREA)
+                    imgdata = cv2.resize(imgdata, (w * 3, h * 3), cv2.INTER_AREA)
+
                     cv2.imshow('frame', imgdata)
-                    frame_score = result.sequence_score[idx]
-                    ax.plot(idx, frame_score, ".b-")
-                    c = cv2.waitKeyEx(0)
-                    print(c)
-                    plt.pause(.01)
-                plt.show()
+                    while True:
+                        points = []
+                        for i in range(idx):
+                            frame_score = result.sequence_score[i]
+                            points.extend(ax.plot(i, frame_score, '.b-'))
+                        plt.pause(0.01)
+
+                        c = cv2.waitKeyEx()
+                        if c == 13 or c == 100:
+                            [p.remove() for p in points]
+                            drawing_loop(idx+1)
+                        elif c == 8 or c == 97:
+                            [p.remove() for p in points]
+                            drawing_loop(idx - 1)
+                        else:
+                            cv2.putText(imgdata,
+                                        "Press Enter to go forward and Backspace to go back",
+                                        (40, 250),
+                                        cv2.FONT_HERSHEY_SIMPLEX,
+                                        .8,
+                                        (40, 40, 255),
+                                        2)
+                            cv2.imshow('frame', imgdata)
+
+                drawing_loop(0)
 
 run_tests()
