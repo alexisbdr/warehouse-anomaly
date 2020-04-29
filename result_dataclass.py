@@ -23,7 +23,7 @@ class testResult:
     @property
     def test_frames(self):
         frames = []
-        for frame in listdir(self.test_path):
+        for frame in sorted(listdir(self.test_path)):
             if frame.endswith(('.tif','.jpeg','.png')):
                 frames.append(frame)
         return frames
@@ -40,7 +40,7 @@ class testResult:
         # Put a legend to the right of the current axis
         ax.plot([], ".b-", label=self.model.strip('.hdf5'))
         ax.legend(loc='center left', bbox_to_anchor=(.8, 0.9))
-
+        ax.set_title(self.test_path.split('/')[-1])
         return ax
 
     def save_to_json(folder: str):

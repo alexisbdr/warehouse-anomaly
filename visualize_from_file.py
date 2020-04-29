@@ -30,49 +30,58 @@ def run_tests():
                     w = 288; h = 162
                     imgdata = cv2.imread(join(path,frames[idx]))
                     imgdata = cv2.resize(imgdata, (w * 3, h * 3), cv2.INTER_AREA)
+                    #cv2.imshow(f"{frames[idx]}", imgdata)
+                    points = []
+                    points.extend(ax.plot(idx, result.sequence_score[idx], '.b-'))
                     try:
-                        while idx < len(result.sequence_score):
+                        while idx < len(result.sequence_score) + 10:
                             print(idx)
+                            cv2.imshow(f'{frames[idx]}', imgdata)
+                            cv2.moveWindow(f'{frames[idx]}', 40, 30)
+                            c = cv2.waitKey()
+                            if idx >= 10: [p.remove() for p in points]
+
                             #Set boundary
                             if idx < 0: idx = 0
 
-                            points = []
-                            for i in range(idx - 1):
-                                frame_score = result.sequence_score[i]
-                                points.extend(ax.plot(i, frame_score, '.b-'))
-                            plt.pause(0.01)
-
                             new_idx = idx
                             if c == 13 or c == 100:
-                                [p.remove() for p in points]
                                 new_idx += 1
                             elif c == 8 or c == 97:
-                                [p.remove() for p in points]
                                 new_idx -= 1
                             elif c == ord('q'):
                                 skip = True
                             else:
                                 cv2.putText(imgdata,
-                                        "Press Enter to go forward and Backspace to go back",
-                                        (40, 250),
-                                        cv2.FONT_HERSHEY_SIMPLEX,
-                                        .8,
-                                        (40, 40, 255),
-                                        2)
+                                    "Press Enter to go forward and Backspace to go back",
+                                    (40, 250),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    .8,
+                                    (40, 40, 255),
+                                    2)
 
                             if idx != new_idx:
                                 #Index change - update the frame and set the index
-                                imgdata = cv2.imread(join(path,frames[idx]))
-                                imgdata = cv2.resize(imgdata, (w * 3, h * 3), cv2.INTER_AREA)
+
                                 idx = new_idx
+                                imgdata = cv2.imread(join(path,frames[idx]))
+
+                                imgdata = cv2.resize(imgdata, (w * 3, h * 3), cv2.INTER_AREA)
+
+                            if idx >= 10:
+                                points = []
+                                for i in range(idx - 10):
+                                    frame_score = result.sequence_score[i]
+                                    points.extend(ax.plot(i, frame_score, '.b-'))
+                                plt.pause(0.01)
 
                             if skip:
                                 cv2.destroyAllWindows()
                                 plt.close()
                                 return
 
-                            cv2.imshow('frame', imgdata)
-                            c = cv2.waitKey()
+                            cv2.destroyAllWindows()
+
                     except KeyboardInterrupt:
                         sys.exit(0)
 
