@@ -69,12 +69,12 @@ def get_training_set():
                 # loop over all the images in the folder (0.tif,1.tif,..,199.tif)
                 for c in sorted(listdir(join(data_file, f))):
                     if str(join(join(data_file, f), c))[-3:] == "tif":
-                        img = Image.open(join(join(data_file, f), c)).resize((256, 256))
+                        img = Image.open(join(join(data_file, f), c)).resize((imsize, imsize))
                     elif str(join(join(data_file, f), c)).endswith(("png", "jpeg")):
-                        img = Image.open(join(join(data_file, f), c)).resize((256, 256)).convert('L')
+                        img = Image.open(join(join(data_file, f), c)).resize((imsize, imsize)).convert('L')
                     else: continue
                     #print(join(join(data_file, f), c))
-                    img = np.array(img, dtype=np.float32) / float(imsize)
+                    img = np.array(img, dtype=np.float32) / float(256)
                     all_frames.append(img)
                 # get the 10-frames sequences from the list of images after applying data augmentation
                 for stride in range(1, 3):
@@ -127,7 +127,7 @@ def get_single_test():
     cnt = 0
     for f in sorted(listdir(Config.SINGLE_TEST_PATH)):
         if str(join(Config.SINGLE_TEST_PATH, f)).endswith(("png","jpeg")):
-            img = Image.open(join(Config.SINGLE_TEST_PATH, f)).resize((256, 256))
+            img = Image.open(join(Config.SINGLE_TEST_PATH, f)).resize((imsize, imsize))
             img = np.array(img, dtype=np.float32) / float(256)
             test[cnt, :, :, 0] = img
             cnt = cnt + 1
@@ -147,7 +147,7 @@ def evaluate(train:bool = True):
         for j in range(0, 10):
             clip[j] = test[i + j, :, :, :]
         sequences[i] = clip
-    
+
     # Reconstruction of the sequences
     reconstructed_sequences = model.predict(sequences,batch_size=Config.BATCH_SIZE)
     print(reconstructed_sequences)
