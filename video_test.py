@@ -16,10 +16,6 @@ class TestPaths:
     PATH = "warehouse_dataset/DSCWillmer/Test"
 
 class Config:
-    RESULTS_FILE = "test_results_all.csv"
-    BASE_MODEL_PATH = "model_lstm.hdf5"
-    UCSD_MODEL_PATH = "UCSD_multi_model_lstm.hdf5"
-    MULTI_MODEL_PATH = "UCSD+Avenue_model_lstm.hdf5"
     MODEL_PATHS = ["willmer_model.hdf5"]
     IMAGE_SIZE = 256
 
