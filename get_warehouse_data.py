@@ -6,13 +6,16 @@ from enum import Enum
 from itertools import product, chain
 import threading
 import concurrent.futures
+from string import Template
+import boto3
 
 sys.path.append("../onetrack_neural_net_infrastructure")
 
 from data_tools.image_request import ImageRequest, ImageFilter
 from data_tools.image_data import ImageData
 
-from dynamo_query import query_global_secondary_index
+from fleet_stream_dynamo_query import query_global_secondary_index
+from timelapse_dynamo_query import query_by_plant
 
 def curr_nano():
     return int(time.time() * 1000000000)
@@ -38,7 +41,7 @@ class WillmerConfig(Enum):
         'ifm-ips-231', 'ifm-ips-233', 'ifm-ips-214', 'ifm-ips-222', 'ifm-ips-220', 'ifm-ips-238', 'ifm-ips-225', 'ifm-ips-212', 'ifm-ips-223', 'ifm-ips-244', 'ifm-ips-216', 'ifm-ips-246', 'ifm-ips-211', 'ifm-ips-241', 'ifm-ips-232', 'ifm-ips-217', 'ifm-ips-227', 'ifm-ips-224', 'ifm-ips-240', 'ifm-ips-218', 'ifm-ips-243', 'ifm-ips-242', 'ifm-ips-229', 'ifm-ips-247', 'ifm-ips-215', 'ifm-ips-245', 'ifm-ips-226', 'ifm-ips-221', 'ifm-ips-210', 'ifm-ips-239', 'ifm-ips-230']
 
 
-class FairbournConfig(Enum):
+class FairburnConfig(Enum):
     TEST_FOLDER = "warehouse_dataset/DSCFairbourn/Test"
     TRAIN_FOLDER = "warehouse_dataset/DSCFairbourn/Train"
     DOWNLOAD_FOLDER = "warehouse_dataset/DSCFairbourn"
@@ -51,6 +54,39 @@ class FairbournConfig(Enum):
     CUSTOMER = 'DSC Logistics'
     PLANT = 'DSC Fairbourn'
 
+class TimelapseConfig(ENUM):
+    TEST_FOLDER = "warehouse_dataset/timelapse_data/$plant/Test"
+    TRAIN_FOLDER = "warehouse_dataset/timelapse_data/$plant/Train"
+    DOWNLOAD_FOLDER = "warehouse_dataset/timelapse_data/$plant"
+
+    PLANTS = ['DSCWilmer', 'DSCFairburn', 'DSCCarlisle']
+
+
+def downloadTimelapseVideosByPlant():
+    """
+    Uses the query_by_plant script to download timelapse videos of warehouse incidents
+    """
+    s3 = boto3.client('s3')
+    for plant in TimelapseConfig.PLANTS.value:
+        print(f'Requesting videos for {plant}')
+        response = query_by_plant(plant)
+        for resp in response:
+            file_key_list = resp['target_output_key'].split('/')
+            hour = file_key_list[-2]
+            day = file_key_list[-3]
+            month = file_key_list[-4]
+            year = file_key_list[-5]
+            machine_id = resp['machine_id']
+            video_ts = resp['video_generated_timestamp']
+            file_str = f"{machine_id}_{year}-{month}-{day}-{hour}_{video_ts}"
+            folder_path = Template(TimelapseConfig.DOWNLOAD_FOLDER.value).substitute(plant)
+            output_path = join(folder_path, file_str)
+            print(f'Downloading to: {output_path}')
+            s3.download_file(
+                resp['target_output_bucket'],
+                resp['target_output_key'],
+                output_path
+            )
 
 def downloadImagesByPlant(plantConfig):
     """
