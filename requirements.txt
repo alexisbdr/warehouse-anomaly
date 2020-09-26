@@ -72,7 +72,7 @@ scipy==1.4.1
 six==1.14.0
 smdebug-rulesconfig==0.1.2
 tensorboard==1.13.1
-tensorflow==1.13.1
+tensorflow==1.15.4
 tensorflow-estimator==1.13.0
 termcolor==1.1.0
 text-unidecode==1.3
